@@ -319,3 +319,249 @@ document.getElementById("forgotPassword")?.addEventListener("click", () => {
     })
     .catch(err => alert(err.message));
 });
+
+/*----------dashboard----------*/
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* ---------------- AUTH STATE SAVE LAST LOGIN ---------------- */
+auth.onAuthStateChanged(async (user) => {
+  const onDashboard = document.getElementById("welcomeText");
+  if (!user) return;
+
+  const userRef = db.collection("users").doc(user.uid);
+  await userRef.set(
+    {
+      email: user.email || "",
+      displayName: user.displayName || "",
+      photoURL: user.photoURL || "",
+      lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+
+  if (onDashboard) {
+    document.getElementById("welcomeText").textContent =
+      `Welcome ${user.displayName || "User"} 👋`;
+
+    document.getElementById("userEmailText").textContent =
+      user.email || "Email ID";
+
+    const userSnap = await userRef.get();
+    const data = userSnap.data();
+
+    if (data?.lastLoginAt?.toDate) {
+      document.getElementById("lastLoginText").textContent =
+        `Last login: ${data.lastLoginAt.toDate().toLocaleString()}`;
+      document.getElementById("profileLastLogin").textContent =
+        `Last login: ${data.lastLoginAt.toDate().toLocaleString()}`;
+    }
+
+    document.getElementById("profileEmail").textContent = user.email || "Email ID";
+    document.getElementById("profileName").textContent =
+      user.displayName || "Your Profile";
+
+    const avatar = user.photoURL || "";
+    if (avatar) {
+      document.getElementById("avatarPreview").innerHTML = `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+      document.getElementById("modalAvatar").innerHTML = `<img src="${avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    }
+  }
+});
+
+/* ---------------- LOGOUT ---------------- */
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await auth.signOut();
+  window.location.href = "auth.html";
+});
+
+/* ---------------- PROFILE MODAL ---------------- */
+const profileModal = document.getElementById("profileModal");
+document.getElementById("openProfileBtn")?.addEventListener("click", () => {
+  profileModal?.classList.add("open");
+});
+document.getElementById("closeProfileBtn")?.addEventListener("click", () => {
+  profileModal?.classList.remove("open");
+});
+profileModal?.addEventListener("click", (e) => {
+  if (e.target === profileModal) profileModal.classList.remove("open");
+});
+
+/* ---------------- PROFILE IMAGE PREVIEW ---------------- */
+document.getElementById("profileImageInput")?.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = `<img src="${reader.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    document.getElementById("avatarPreview").innerHTML = img;
+    document.getElementById("modalAvatar").innerHTML = img;
+  };
+  reader.readAsDataURL(file);
+});
+
+/* ---------------- PROTECT WRITE PAGE ---------------- */
+if (document.getElementById("storyEditor")) {
+  auth.onAuthStateChanged((user) => {
+    if (!user) {
+      window.location.href = "auth.html";
+    }
+  });
+}
+
+/* ---------------- FORMAT TEXT ---------------- */
+function formatText(command) {
+  document.execCommand(command, false, null);
+}
+
+/* ---------------- POST STORY ---------------- */
+document.getElementById("postStoryBtn")?.addEventListener("click", async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    window.location.href = "auth.html";
+    return;
+  }
+
+  const title = document.getElementById("storyTitle").value.trim();
+  const content = document.getElementById("storyEditor").innerHTML.trim();
+
+  if (!title || !content) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  await db.collection("stories").add({
+    title,
+    content,
+    uid: user.uid,
+    userEmail: user.email || "Anonymous",
+    displayName: user.displayName || "",
+    likes: 0,
+    likedBy: [],
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  alert("Story published successfully!");
+  window.location.href = "dashboard.html";
+});
+
+/* ---------------- MY STORIES ---------------- */
+const myStoriesList = document.getElementById("myStoriesList");
+
+function loadMyStories() {
+  if (!myStoriesList) return;
+
+  auth.onAuthStateChanged((user) => {
+    if (!user) return;
+
+    db.collection("stories")
+      .where("uid", "==", user.uid)
+      .orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        myStoriesList.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+          const story = doc.data();
+          const card = document.createElement("div");
+          card.className = "story-card story-item show";
+          card.innerHTML = `
+            <h3>${story.title}</h3>
+            <p>${story.content}</p>
+            <div class="story-meta">
+              <span>👤 ${story.userEmail || "Anonymous"}</span>
+            </div>
+          `;
+          myStoriesList.appendChild(card);
+        });
+      });
+  });
+}
+loadMyStories();
+
+/* ---------------- DISCOVER STORIES ---------------- */
+const discoverStoriesList = document.getElementById("discoverStoriesList");
+
+function observeFadeIn(element) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  observer.observe(element);
+}
+
+function loadDiscoverStories() {
+  if (!discoverStoriesList) return;
+
+  db.collection("stories")
+    .orderBy("createdAt", "desc")
+    .onSnapshot((snapshot) => {
+      discoverStoriesList.innerHTML = "";
+
+      snapshot.forEach((doc) => {
+        const story = doc.data();
+        const card = document.createElement("div");
+        card.className = "story-card story-item";
+
+        const date = story.createdAt?.toDate
+          ? story.createdAt.toDate().toLocaleString()
+          : "Just now";
+
+        card.innerHTML = `
+          <h3>${story.title}</h3>
+          <p>${story.content}</p>
+          <div class="story-meta">
+            <span>👤 ${story.userEmail || "Anonymous"}</span>
+            <span>• ${date}</span>
+          </div>
+        `;
+
+        discoverStoriesList.appendChild(card);
+        observeFadeIn(card);
+      });
+    });
+}
+loadDiscoverStories();
+
+/* ---------------- AUTH PAGE ACTIONS ---------------- */
+document.getElementById("signupBtn")?.addEventListener("click", () => {
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(err => alert(err.message));
+});
+
+document.getElementById("loginBtn")?.addEventListener("click", () => {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(err => alert(err.message));
+});
+
+document.getElementById("googleLoginBtn")?.addEventListener("click", () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => window.location.href = "dashboard.html")
+    .catch(err => alert(err.message));
+});
+
+document.getElementById("forgotPassword")?.addEventListener("click", () => {
+  const email = document.getElementById("loginEmail")?.value.trim();
+  if (!email) {
+    alert("Please enter your email in the login field first");
+    return;
+  }
+
+  auth.sendPasswordResetEmail(email)
+    .then(() => alert("Password reset email sent"))
+    .catch(err => alert(err.message));
+});
