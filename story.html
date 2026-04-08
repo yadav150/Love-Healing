@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heartspace — Story</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">❤</span>
+        <span>Heartspace</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="auth.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="single-story">
+    <div class="container">
+      <article id="storyContent">
+        <!-- title + full story -->
+      </article>
+
+      <div id="writerInfo" class="writer-info">
+        <!-- writer email + date created -->
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>© 2026 Heartspace. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK same as index.html -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
+      authDomain: "heartspace-app.firebaseapp.com",
+      projectId: "heartspace-app",
+      storageBucket: "heartspace-app.firebasestorage.app",
+      messagingSenderId: "706297788927",
+      appId: "1:706297788927:web:625d0e4834517c7ad70fca"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+    const db = firebase.firestore();
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (!id) {
+      document.getElementById("storyContent").innerHTML = "<p>No story selected.</p>";
+      throw new Error("Missing story ID");
+    }
+
+    db.collection("stories").doc(id).get()
+      .then(doc => {
+        if (!doc.exists) {
+          document.getElementById("storyContent").innerHTML = "<p>Story not found.</p>";
+          return;
+        }
+
+        const story = doc.data();
+        const date = story.createdAt?.toDate
+          ? story.createdAt.toDate().toLocaleString()
+          : "Unknown date";
+
+        document.getElementById("storyContent").innerHTML = `
+          <h2>${story.title}</h2>
+          <p>${story.content}</p>
+        `;
+
+        document.getElementById("writerInfo").innerHTML = `
+          <div class="writer-info">
+            <p><strong>About the writer:</strong></p>
+            <p><span>📧 ${story.userEmail || "Anonymous"}</span></p>
+            <p><span>📅 Joined: ${date}</span></p>
+          </div>
+        `;
+      })
+      .catch(err => {
+        console.error("Error loading story:", err);
+        document.getElementById("storyContent").innerHTML = "<p>Something went wrong. Please try again.</p>";
+      });
+  </script>
+</body>
+</html>
