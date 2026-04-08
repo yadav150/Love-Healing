@@ -3,73 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Write Story - Heartspace</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Heartspace — Write Story</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <header class="nav">
   <div class="container nav-inner">
-    <a href="index.html" class="brand">
+    <a href="dashboard.html" class="brand">
       <span class="brand-mark">❤</span>
       <span>Heartspace</span>
     </a>
 
     <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="auth.html">Login</a>
-      <a href="index.html#stories">Discover</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="discover.html">Explore New</a>
+      <a href="write.html">Write New</a>
     </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="dashboard.html">Back to Dashboard</a>
+    </div>
   </div>
 </header>
 
 <main>
   <section class="section">
     <div class="container">
-      <h2>Write Your Story ✍️</h2>
+      <div class="section-head">
+        <div>
+          <h2>Write Your Story</h2>
+          <p>Publish your heartbreak story for others to read.</p>
+        </div>
+      </div>
 
       <div class="story-card">
-
         <input type="text" id="storyTitle" placeholder="Story Title" />
 
-        <div style="margin:10px 0;">
+        <div class="editor-toolbar">
           <button type="button" onclick="formatText('bold')"><b>B</b></button>
           <button type="button" onclick="formatText('italic')"><i>I</i></button>
           <button type="button" onclick="formatText('underline')"><u>U</u></button>
         </div>
 
-        <div id="storyEditor" contenteditable="true"
-          style="border:1px solid #ccc; padding:10px; min-height:150px; border-radius:6px;">
-        </div>
+        <div id="storyEditor" contenteditable="true" class="story-editor"></div>
 
-        <button class="btn btn-primary" id="postStoryBtn" style="margin-top:10px;">
-          Publish Story
-        </button>
-
+        <button class="btn btn-primary" id="postStoryBtn">Publish Story</button>
       </div>
     </div>
   </section>
 </main>
 
-<!-- Firebase -->
+<footer>
+  <div class="container footer-inner">
+    <div>© 2026 Heartspace. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="discover.html">Explore Stories</a>
+      <a href="write.html">Write New</a>
+    </div>
+  </div>
+</footer>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
-  authDomain: "heartspace-app.firebaseapp.com",
-  projectId: "heartspace-app",
-  storageBucket: "heartspace-app.firebasestorage.app",
-  messagingSenderId: "706297788927",
-  appId: "1:706297788927:web:625d0e4834517c7ad70fca"
-};
-
-firebase.initializeApp(firebaseConfig);
+  const firebaseConfig = {
+    apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
+    authDomain: "heartspace-app.firebaseapp.com",
+    projectId: "heartspace-app",
+    storageBucket: "heartspace-app.firebasestorage.app",
+    messagingSenderId: "706297788927",
+    appId: "1:706297788927:web:625d0e4834517c7ad70fca"
+  };
+  firebase.initializeApp(firebaseConfig);
 </script>
 
 <script src="script.js"></script>
-
 </body>
 </html>
