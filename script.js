@@ -300,3 +300,139 @@ document.getElementById("postStoryBtn")?.addEventListener("click", async () => {
   alert("Story published successfully!");
   window.location.href = "dashboard.html";
 });
+/* ---------------- DASHBOARD PAGE LOGIC ---------------- */
+if (window.location.pathname.includes("dashboard.html")) {
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  const welcomeText = document.getElementById("welcomeText");
+  const userEmailText = document.getElementById("userEmailText");
+  const lastLoginText = document.getElementById("lastLoginText");
+  const avatarPreview = document.getElementById("avatarPreview");
+  const modalAvatar = document.getElementById("modalAvatar");
+  const profileName = document.getElementById("profileName");
+  const profileEmail = document.getElementById("profileEmail");
+  const profileLastLogin = document.getElementById("profileLastLogin");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const myStoriesList = document.getElementById("myStoriesList");
+
+  function formatDate(timestamp) {
+    if (!timestamp) return "Never";
+    const date = timestamp.toDate ? timestamp.toDate() : new Date();
+    return date.toLocaleString();
+  }
+
+  // 1. User data + welcome
+  auth.onAuthStateChanged(user => {
+    if (!user) {
+      window.location.href = "auth.html";
+      return;
+    }
+
+    const email = user.email || "Google User";
+    const displayName = user.displayName || email.split("@")[0];
+
+    welcomeText.textContent = `Welcome, ${displayName} 👋`;
+    userEmailText.textContent = email;
+
+    // lastSignInTime (Google / Firebase auth metadata)
+    const metadata = user.metadata;
+    const lastSignIn = metadata.lastSignInTime ? new Date(metadata.lastSignInTime) : new Date();
+
+    lastLoginText.textContent = `Last login: ${formatDate(lastSignIn)}`;
+    profileEmail.textContent = email;
+    profileLastLogin.textContent = `Last login: ${formatDate(lastSignIn)}`;
+    profileName.textContent = displayName;
+
+    // Avatar
+    if (user.photoURL) {
+      avatarPreview.style.backgroundImage = `url(${user.photoURL})`;
+      avatarPreview.style.color = "transparent";
+      modalAvatar.style.backgroundImage = `url(${user.photoURL})`;
+      modalAvatar.style.color = "transparent";
+    } else {
+      const colorHex = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
+      avatarPreview.style.backgroundColor = colorHex;
+      avatarPreview.style.color = "white";
+      modalAvatar.style.backgroundColor = colorHex;
+      modalAvatar.style.color = "white";
+    }
+
+    loadMyStories(user);
+  });
+
+  // 2. My Stories list (only their own stories)
+  function loadMyStories(user) {
+    if (!myStoriesList) return;
+
+    db.collection("stories")
+      .where("uid", "==", user.uid)
+      .orderBy("createdAt", "desc")
+      .onSnapshot(snapshot => {
+        myStoriesList.innerHTML = "";
+
+        if (snapshot.empty) {
+          myStoriesList.innerHTML = `<p>You haven’t written any story yet.</p>`;
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const story = doc.data();
+          const id = doc.id;
+          const date = story.createdAt?.toDate ? story.createdAt.toDate().toLocaleString() : "Just now";
+
+          const card = document.createElement("div");
+          card.className = "story-card";
+
+          card.innerHTML = `
+            <h3>${story.title}</h3>
+            <p>${story.content.substring(0, 120)}${story.content.length > 120 ? "..." : ""}</p>
+
+            <div class="story-meta">
+              <span>• ${date}</span>
+            </div>
+
+            <div style="margin-top:10px;">
+              <button class="btn btn-ghost btn-sm" onclick="editStory('${id}')">
+                ✏️ Edit
+              </button>
+              <button class="btn btn-ghost btn-sm" onclick="archiveStory('${id}')">
+                🗑️ Delete
+              </button>
+              <button class="btn btn-primary btn-sm" style="margin-left:10px;" onclick="viewStory('${id}')">
+                View full
+              </button>
+            </div>
+          `;
+
+          myStoriesList.appendChild(card);
+        });
+      });
+  }
+
+  // 3. Edit / Delete / View helpers
+  window.editStory = function(id) {
+    window.location.href = `write.html?story=${id}`;
+  };
+
+  window.archiveStory = function(id) {
+    if (!confirm("Delete this story permanently?")) return;
+
+    db.collection("stories").doc(id).delete()
+      .then(() => alert("Story deleted."))
+      .catch(err => alert("Error deleting story: " + err.message));
+  };
+
+  window.viewStory = function(id) {
+    window.open(`story.html?id=${id}`, "_blank");
+  };
+
+  // 4. Logout button
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      auth.signOut().then(() => {
+        window.location.href = "auth.html";
+      });
+    });
+  }
+}
