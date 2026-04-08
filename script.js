@@ -91,3 +91,34 @@ if (googleLoginBtn) {
       });
   });
 }
+// Elements
+const userBox = document.getElementById("userBox");
+const userEmailText = document.getElementById("userEmail");
+const logoutBtn = document.getElementById("logoutBtn");
+
+// Listen to auth state changes
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // Show user box
+    userBox.style.display = "block";
+
+    // Display email (Google users may not always have email visible in same way)
+    userEmailText.textContent = user.email || "Google User";
+  } else {
+    // Hide user box when logged out
+    userBox.style.display = "none";
+  }
+});
+
+// Logout
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    auth.signOut()
+      .then(() => {
+        alert("Logged out");
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+  });
+}
