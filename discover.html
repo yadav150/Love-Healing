@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Heartspace — Discover Stories</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="dashboard.html" class="brand">
+      <span class="brand-mark">❤</span>
+      <span>Heartspace</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="write.html">Write New</a>
+      <a href="discover.html">Explore New</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a class="btn btn-ghost" href="auth.html">Login</a>
+      <a class="btn btn-primary" href="write.html">Write Story</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Discover Stories</h2>
+          <p>Stories appear as you scroll with a fade-in effect.</p>
+        </div>
+      </div>
+
+      <div id="discoverStoriesList" class="stories"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>© 2026 Heartspace. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="write.html">Write New</a>
+      <a href="discover.html">Explore Stories</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
+    authDomain: "heartspace-app.firebaseapp.com",
+    projectId: "heartspace-app",
+    storageBucket: "heartspace-app.firebasestorage.app",
+    messagingSenderId: "706297788927",
+    appId: "1:706297788927:web:625d0e4834517c7ad70fca"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>
