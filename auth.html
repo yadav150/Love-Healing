@@ -5,75 +5,171 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Heartspace — Login</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+      padding: 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      background: #fff;
+    }
+
+    .auth-card h2 {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .auth-card input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .auth-card input:focus {
+      border-color: #ff5a7a;
+    }
+
+    .auth-btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .auth-links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .auth-links a {
+      cursor: pointer;
+      color: #ff5a7a;
+      text-decoration: none;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 15px 0;
+      position: relative;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      width: 40%;
+      background: #ddd;
+      position: absolute;
+      top: 50%;
+    }
+
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+
+    .divider span {
+      background: #fff;
+      padding: 0 10px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    @media (max-width: 500px) {
+      .auth-card {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="nav">
-    <div class="container nav-inner">
-      <a href="index.html" class="brand">
-        <span class="brand-mark">❤</span>
-        <span>Heartspace</span>
-      </a>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="write.html">Write Story</a>
-        <a href="index.html#stories">Stories</a>
-      </nav>
+
+<!-- Header -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">❤</span>
+      <span>Heartspace</span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="write.html">Write Story</a>
+      <a href="index.html#stories">Discover</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Auth UI -->
+<main class="auth-container">
+  <div class="auth-card">
+
+    <h2>Welcome Back</h2>
+
+    <!-- Signup -->
+    <input type="email" id="signupEmail" placeholder="Enter email">
+    <input type="password" id="signupPassword" placeholder="Create password">
+    <button class="btn btn-primary auth-btn" id="signupBtn">Sign Up</button>
+
+    <div class="divider"><span>OR</span></div>
+
+    <!-- Login -->
+    <input type="email" id="loginEmail" placeholder="Enter email">
+    <input type="password" id="loginPassword" placeholder="Enter password">
+
+    <div class="auth-links">
+      <a id="forgotPassword">Forgot password?</a>
     </div>
-  </header>
 
-  <main>
-    <section class="section" id="auth">
-      <div class="container">
-        <div class="story-card" id="userBox" style="display:none;">
-          <h3>Welcome 👤</h3>
-          <p id="userEmail"></p>
-          <button class="btn btn-primary" id="logoutBtn">Logout</button>
-        </div>
+    <button class="btn btn-primary auth-btn" id="loginBtn">Login</button>
 
-        <h2>Account</h2>
+    <div class="divider"><span>OR</span></div>
 
-        <div class="story-card">
-          <h3>Sign Up</h3>
-          <input type="email" id="signupEmail" placeholder="Email" />
-          <input type="password" id="signupPassword" placeholder="Password" />
-          <button class="btn btn-primary" id="signupBtn">Sign Up</button>
-        </div>
+    <!-- Google -->
+    <button class="btn btn-primary auth-btn" id="googleLoginBtn">
+      Continue with Google
+    </button>
 
-        <br />
+  </div>
+</main>
 
-        <div class="story-card">
-          <h3>Login</h3>
-          <input type="email" id="loginEmail" placeholder="Email" />
-          <input type="password" id="loginPassword" placeholder="Password" />
-          <button class="btn btn-primary" id="loginBtn">Login</button>
-        </div>
+<!-- Footer -->
+<footer>
+  <div class="container footer-inner">
+    <div>© 2026 Heartspace. All rights reserved.</div>
+  </div>
+</footer>
 
-        <br />
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-        <div class="story-card">
-          <h3>Or continue with Google</h3>
-          <button class="btn btn-primary" id="googleLoginBtn">Continue with Google</button>
-        </div>
-      </div>
-    </section>
-  </main>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
+  authDomain: "heartspace-app.firebaseapp.com",
+  projectId: "heartspace-app",
+  storageBucket: "heartspace-app.firebasestorage.app",
+  messagingSenderId: "706297788927",
+  appId: "1:706297788927:web:625d0e4834517c7ad70fca"
+};
+firebase.initializeApp(firebaseConfig);
+</script>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="script.js"></script>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
-      authDomain: "heartspace-app.firebaseapp.com",
-      projectId: "heartspace-app",
-      storageBucket: "heartspace-app.firebasestorage.app",
-      messagingSenderId: "706297788927",
-      appId: "1:706297788927:web:625d0e4834517c7ad70fca"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
-
-  <script src="script.js"></script>
 </body>
 </html>
