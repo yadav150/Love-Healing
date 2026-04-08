@@ -90,14 +90,46 @@ document.getElementById("signupBtn")?.addEventListener("click", () => {
 
 /* ---------------- LOGIN ---------------- */
 document.getElementById("loginBtn")?.addEventListener("click", () => {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
+  const emailInput = document.getElementById("loginEmail");
+  const passwordInput = document.getElementById("loginPassword");
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
 
+  // 1. Empty check
+  if (!email) {
+    alert("Please enter your email.");
+    emailInput.focus();
+    return;
+  }
+  if (!password) {
+    alert("Please enter your password.");
+    passwordInput.focus();
+    return;
+  }
+
+  // 2. Simple email format check
+  if (!email.includes("@") || !email.includes(".")) {
+    alert("Please enter a valid email address.");
+    emailInput.focus();
+    return;
+  }
+
+  // 3. Firebase login
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       window.location.href = "dashboard.html";
     })
-    .catch(err => alert(err.message));
+    .catch(err => {
+      if (err.code === "auth/invalid-email") {
+        alert("Please enter a valid email address.");
+      } else if (err.code === "auth/wrong-password") {
+        alert("Incorrect password. Please try again.");
+      } else if (err.code === "auth/user-not-found") {
+        alert("No account found with this email.");
+      } else {
+        alert("Something went wrong. Please try again.");
+      }
+    });
 });
 
 /* ---------------- GOOGLE LOGIN ---------------- */
