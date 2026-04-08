@@ -22,9 +22,9 @@
       </nav>
 
       <div class="nav-actions">
-  <a href="#stories" class="btn btn-ghost">Explore stories</a>
-  <a href="#share" class="btn btn-primary" id="writeBtn">Write your story</a>
-</div>
+        <a href="#stories" class="btn btn-ghost">Explore stories</a>
+        <a href="#share" class="btn btn-primary" id="writeBtn">Write your story</a>
+      </div>
     </div>
   </header>
 
@@ -43,24 +43,9 @@
             <a href="#share" class="btn btn-primary">Start writing</a>
             <a href="#features" class="btn btn-ghost">See how it works</a>
           </div>
-
-          <div class="hero-stats" aria-label="Platform highlights">
-            <div class="stat">
-              <strong>Anonymous</strong>
-              <span>Tell your story safely</span>
-            </div>
-            <div class="stat">
-              <strong>Responsive</strong>
-              <span>Looks great on all screens</span>
-            </div>
-            <div class="stat">
-              <strong>Simple</strong>
-              <span>Easy to use and clean</span>
-            </div>
-          </div>
         </div>
 
-        <aside class="hero-card" aria-label="Featured story preview">
+        <aside class="hero-card">
           <div class="card-top">
             <span class="pill">Featured story</span>
             <span class="pill">2 min read</span>
@@ -74,14 +59,6 @@
                 and in the heart that keeps hoping.
               </p>
             </article>
-
-            <article class="preview-item">
-              <h3>“We were perfect until life pulled us apart.”</h3>
-              <p>
-                A space for stories that were once full of love, now full of questions,
-                healing, and strength.
-              </p>
-            </article>
           </div>
         </aside>
       </div>
@@ -89,72 +66,39 @@
 
     <section class="section" id="features">
       <div class="container">
-        <div class="section-head">
-          <div>
-            <h2>Built for emotional storytelling</h2>
-            <p>
-              A polished home page that can later be connected to signup, posting, likes,
-              comments, and anonymous publishing.
-            </p>
-          </div>
-        </div>
-
+        <h2>Built for emotional storytelling</h2>
         <div class="grid-3">
           <div class="feature">
             <div class="icon">✍</div>
             <h3>Write freely</h3>
-            <p>Give users a calm space to express breakup pain, healing, and lessons learned.</p>
+            <p>Give users a calm space to express breakup pain.</p>
           </div>
           <div class="feature">
             <div class="icon">🔒</div>
             <h3>Private by design</h3>
-            <p>Keep the platform simple now and connect secure accounts later with backend tools.</p>
+            <p>Secure login and authentication.</p>
           </div>
           <div class="feature">
             <div class="icon">💬</div>
             <h3>Connect with others</h3>
-            <p>Let readers feel less alone by reading stories that reflect their own heartache.</p>
+            <p>Read and relate to others' experiences.</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- ✅ UPDATED STORIES SECTION -->
     <section class="section" id="stories">
       <div class="container">
         <div class="section-head">
           <div>
             <h2>Recent stories</h2>
-            <p>Sample story cards you can later connect to your database.</p>
+            <p>Live stories from users</p>
           </div>
         </div>
 
-        <div class="stories">
-          <article class="story-card">
-            <h3>When love ended quietly</h3>
-            <p>
-              We did not fight. We just slowly became strangers. That silence hurt more than any
-              argument ever could.
-            </p>
-            <div class="story-meta">
-              <span class="tag">Breakup</span>
-              <span class="tag">Healing</span>
-              <span>• 4 min read</span>
-            </div>
-          </article>
-
-          <article class="story-card">
-            <h3>Still learning how to move on</h3>
-            <p>
-              Some days feel normal, and some days the memories come back all at once. Healing is
-              not a straight path.
-            </p>
-            <div class="story-meta">
-              <span class="tag">Heartbreak</span>
-              <span class="tag">Memory</span>
-              <span>• 3 min read</span>
-            </div>
-          </article>
-        </div>
+        <!-- Firebase will inject stories here -->
+        <div id="storiesList" class="stories"></div>
       </div>
     </section>
 
@@ -163,7 +107,7 @@
         <div class="cta-card">
           <div>
             <h2>Ready to turn pain into a shared space?</h2>
-            <p>Use this page as the first step. Later you can add signup, posting, and a story feed.</p>
+            <p>Use this page as the first step.</p>
           </div>
           <a href="#home" class="btn btn-primary">Get started</a>
         </div>
@@ -171,47 +115,47 @@
     </section>
 
     <section class="section" id="auth">
-  <div class="container">
+      <div class="container">
 
-    <div class="story-card" id="userBox" style="display:none;">
-  <h3>Welcome 👤</h3>
-  <p id="userEmail"></p>
-  <button class="btn btn-primary" id="logoutBtn">Logout</button>
-</div>
+        <div class="story-card" id="userBox" style="display:none;">
+          <h3>Welcome 👤</h3>
+          <p id="userEmail"></p>
+          <button class="btn btn-primary" id="logoutBtn">Logout</button>
+        </div>
 
-    <h2>Account</h2>
+        <h2>Account</h2>
 
-    <!-- Signup -->
-    <div class="story-card">
-      <h3>Sign Up</h3>
-      <input type="email" id="signupEmail" placeholder="Email" />
-      <input type="password" id="signupPassword" placeholder="Password" />
-      <button class="btn btn-primary" id="signupBtn">Sign Up</button>
-    </div>
+        <!-- Signup -->
+        <div class="story-card">
+          <h3>Sign Up</h3>
+          <input type="email" id="signupEmail" placeholder="Email" />
+          <input type="password" id="signupPassword" placeholder="Password" />
+          <button class="btn btn-primary" id="signupBtn">Sign Up</button>
+        </div>
 
-    <br />
+        <br />
 
-    <!-- Login -->
-    <div class="story-card">
-      <h3>Login</h3>
-      <input type="email" id="loginEmail" placeholder="Email" />
-      <input type="password" id="loginPassword" placeholder="Password" />
-      <button class="btn btn-primary" id="loginBtn">Login</button>
-    </div>
+        <!-- Login -->
+        <div class="story-card">
+          <h3>Login</h3>
+          <input type="email" id="loginEmail" placeholder="Email" />
+          <input type="password" id="loginPassword" placeholder="Password" />
+          <button class="btn btn-primary" id="loginBtn">Login</button>
+        </div>
 
-    <br />
+        <br />
 
-    <!-- Google Login -->
-    <div class="story-card">
-      <h3>Or continue with Google</h3>
-      <button class="btn btn-primary" id="googleLoginBtn">
-        Continue with Google
-      </button>
-    </div>
+        <!-- Google Login -->
+        <div class="story-card">
+          <h3>Or continue with Google</h3>
+          <button class="btn btn-primary" id="googleLoginBtn">
+            Continue with Google
+          </button>
+        </div>
 
-  </div>
-</section>
-    
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -224,26 +168,25 @@
       </div>
     </div>
   </footer>
- <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-<script>
-  // Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
-    authDomain: "heartspace-app.firebaseapp.com",
-    projectId: "heartspace-app",
-    storageBucket: "heartspace-app.firebasestorage.app",
-    messagingSenderId: "706297788927",
-    appId: "1:706297788927:web:625d0e4834517c7ad70fca"
-  };
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-</script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
+      authDomain: "heartspace-app.firebaseapp.com",
+      projectId: "heartspace-app",
+      storageBucket: "heartspace-app.firebasestorage.app",
+      messagingSenderId: "706297788927",
+      appId: "1:706297788927:web:625d0e4834517c7ad70fca"
+    };
 
-<!-- Your script -->
-<script src="script.js"></script>
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
