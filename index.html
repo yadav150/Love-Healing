@@ -181,6 +181,26 @@
       </div>
     </div>
   </footer>
-  <script src="script.js"></script>
+ <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script>
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDRcgEc428zLbEDVP8LmN7DPubfwTFhN9U",
+    authDomain: "heartspace-app.firebaseapp.com",
+    projectId: "heartspace-app",
+    storageBucket: "heartspace-app.firebasestorage.app",
+    messagingSenderId: "706297788927",
+    appId: "1:706297788927:web:625d0e4834517c7ad70fca"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<!-- Your script -->
+<script src="script.js"></script>
 </body>
 </html>
