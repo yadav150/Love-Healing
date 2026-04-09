@@ -1,15 +1,19 @@
 /* 1. Global */
 :root {
-  --bg: #0f1115;
-  --panel: rgba(255, 255, 255, 0.06);
-  --panel-2: rgba(255, 255, 255, 0.09);
-  --text: #f5f7fb;
-  --muted: rgba(245, 247, 255, 0.72);
-  --line: rgba(255, 255, 255, 0.12);
-  --accent: #ff6b8b;
+  --bg: #ffffff;
+  --bg-soft: #f8f9fa;
+  --panel: #ffffff;
+  --panel-soft: #f0f2f5;
+  --text: #0f1115;
+  --text-light: #444;
+  --muted: #666;
+  --light-border: #e0e0e0;
+  --accent: #e91e63;
   --accent-2: #7c5cff;
-  --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-  --radius: 22px;
+  --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --radius: 16px;
+  --radius-sm: 8px;
   --max: 1180px;
   --spacing: 24px;
   --spacing-lg: 32px;
@@ -25,11 +29,8 @@ html {
 
 body {
   margin: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(255, 107, 139, 0.14), transparent 30%),
-    radial-gradient(circle at top right, rgba(124, 92, 255, 0.14), transparent 28%),
-    linear-gradient(180deg, #0b0d12 0%, #0f1115 100%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
   color: var(--text);
   min-height: 100vh;
 }
@@ -50,55 +51,57 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
-  backdrop-filter: blur(18px);
-  background: rgba(15, 17, 21, 0.62);
-  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.92);
+  border-bottom: 1px solid var(--light-border);
 }
 
 .nav-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 76px;
-  gap: 20px;
+  min-height: 72px;
+  gap: 16px;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 800;
+  gap: 10px;
+  font-weight: 600;
   letter-spacing: 0.2px;
   font-size: 1.05rem;
+  color: var(--accent);
 }
 
 .brand-mark {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 10px 25px rgba(255, 107, 139, 0.28);
-  font-size: 1.1rem;
+  box-shadow: 0 8px 20px rgba(233, 30, 99, 0.18);
+  font-size: 1.15rem;
+  color: white;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
-  color: var(--muted);
+  gap: 20px;
+  color: var(--text-light);
   font-size: 0.95rem;
 }
 
 .nav-links a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* 3. Buttons */
@@ -106,11 +109,10 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  border: 1px solid transparent;
+  gap: 8px;
   border-radius: 999px;
-  padding: 12px 18px;
-  font-weight: 700;
+  padding: 10px 16px;
+  font-weight: 600;
   cursor: pointer;
   transition: 0.2s ease;
   white-space: nowrap;
@@ -123,24 +125,25 @@ a {
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: white;
-  box-shadow: 0 16px 32px rgba(124, 92, 255, 0.24);
+  border: none;
+  box-shadow: 0 12px 28px rgba(233, 30, 99, 0.24);
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--line);
+  background: transparent;
+  border: 1px solid var(--light-border);
   color: var(--text);
 }
 
 /* 4. Hero Section */
 .hero {
-  padding: 72px 0 36px;
+  padding: 80px 0 40px;
 }
 
 .hero-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: 28px;
+  gap: 32px;
   align-items: center;
 }
 
@@ -149,26 +152,27 @@ a {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.04);
   border-radius: 999px;
+  border: 1px solid var(--light-border);
+  background: var(--bg);
   color: var(--muted);
   font-size: 0.9rem;
-  margin-bottom: 18px;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
 }
 
 h1 {
   margin: 0;
-  font-size: clamp(2.5rem, 5vw, 4.8rem);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  max-width: 10ch;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--text);
 }
 
 .hero p {
   margin: 18px 0 0;
   max-width: 60ch;
-  color: var(--muted);
+  color: var(--text-light);
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -177,71 +181,34 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 28px;
-}
-
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 28px;
-}
-
-.stat {
-  padding: 16px;
-  border-radius: 18px;
-  background: var(--panel);
-  border: 1px solid var(--line);
-}
-
-.stat strong {
-  display: block;
-  font-size: 1.2rem;
-  margin-bottom: 4px;
-}
-
-.stat span {
-  color: var(--muted);
-  font-size: 0.92rem;
+  margin-top: 30px;
 }
 
 .hero-card {
-  position: relative;
-  padding: 22px;
-  border-radius: calc(var(--radius) + 6px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-
-.hero-card::before {
-  content: "";
-  position: absolute;
-  inset: auto -40px -40px auto;
-  width: 180px;
-  height: 180px;
-  background: radial-gradient(circle, rgba(255, 107, 139, 0.22), transparent 65%);
-  pointer-events: none;
+  padding: 24px;
+  border-radius: calc(var(--radius) + 4px);
+  background: var(--panel);
+  border: 1px solid var(--light-border);
+  box-shadow: var(--shadow-sm);
 }
 
 .card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 6px;
+  padding: 7px 11px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--line);
-  color: var(--muted);
+  background: rgba(233, 30, 99, 0.08);
+  border: 1px solid rgba(233, 30, 99, 0.16);
+  color: var(--accent);
   font-size: 0.9rem;
 }
 
@@ -252,45 +219,46 @@ h1 {
 
 .preview-item {
   padding: 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--line);
+  border-radius: 14px;
+  border: 1px solid var(--light-border);
+  background: var(--bg);
 }
 
 .preview-item h3 {
   margin: 0 0 8px;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  color: var(--text);
 }
 
 .preview-item p {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-light);
   line-height: 1.6;
   font-size: 0.95rem;
 }
 
 /* 5. Features Section */
 .section {
-  padding: 28px 0 8px;
+  padding: 36px 0 12px;
 }
 
 .section-head {
   display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 18px;
-  margin-bottom: 18px;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .section-head h2 {
   margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
   letter-spacing: -0.03em;
+  color: var(--text);
 }
 
 .section-head p {
   margin: 0;
-  color: var(--muted);
+  color: var(--text-light);
   max-width: 52ch;
   line-height: 1.6;
 }
@@ -298,38 +266,38 @@ h1 {
 .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+  gap: 20px;
 }
 
 .feature {
-  border-radius: var(--radius);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
-  padding: 22px;
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border: 1px solid var(--light-border);
+  background: var(--panel-soft);
 }
 
 .feature .icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, rgba(255, 107, 139, 0.18), rgba(124, 92, 255, 0.18));
-  border: 1px solid var(--line);
-  margin-bottom: 16px;
-  font-size: 1.15rem;
+  background: linear-gradient(135deg, rgba(233, 30, 99, 0.12), rgba(124, 92, 255, 0.12));
+  border: 1px solid rgba(233, 30, 99, 0.18);
+  margin-bottom: 14px;
+  font-size: 1.1rem;
 }
 
 .feature h3 {
   margin: 0 0 10px;
   font-size: 1.08rem;
+  color: var(--text);
 }
 
 .feature p {
   margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
+  color: var(--text-light);
+  line-height: 1.65;
 }
 
 /* 6. Stories Section */
@@ -340,71 +308,73 @@ h1 {
 .stories {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
+  gap: 20px;
 }
 
 .story-card {
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  border: 1px solid var(--light-border);
   background: var(--panel);
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
-  padding: 22px;
+  box-shadow: var(--shadow-sm);
 }
 
 .story-card h3 {
   margin: 0 0 10px;
   font-size: 1.08rem;
+  color: var(--text);
 }
 
 .story-card p {
   margin: 0;
-  color: var(--muted);
-  line-height: 1.7;
+  color: var(--text-light);
+  line-height: 1.65;
 }
 
 .story-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 14px;
   color: var(--muted);
   font-size: 0.9rem;
 }
 
 /* 7. CTA (Get started) */
 .cta {
-  padding: 36px 0 80px;
+  padding: 40px 0 72px;
 }
 
 .cta-card {
-  border-radius: var(--radius);
-  background: var(--panel);
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
-  padding: 26px;
+  border-radius: var(--radius-sm);
+  padding: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 18px;
+  border: 1px solid var(--light-border);
+  background: var(--panel-soft);
 }
 
 .cta-card h2 {
   margin: 0 0 10px;
   font-size: clamp(1.5rem, 3vw, 2rem);
+  color: var(--text);
 }
 
 .cta-card p {
   margin: 0;
-  color: var(--muted);
-  max-width: 48ch;
-  line-height: 1.6;
+  color: var(--text-light);
+  max-width: 50ch;
+  line-height: 1.65;
 }
 
 /* 8. Footer */
 footer {
-  padding: 18px 0 34px;
+  padding: 20px 0 28px;
   color: var(--muted);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--light-border);
+  background: var(--bg);
 }
 
 .footer-inner {
@@ -413,7 +383,7 @@ footer {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-top: 18px;
+  padding-top: 16px;
 }
 
 .footer-links {
@@ -423,11 +393,15 @@ footer {
 }
 
 .footer-links a:hover {
-  color: var(--text);
+  color: var(--accent);
 }
 
-/* 9. Responsive (already in your CSS) */
+/* 9. Responsive (fixed nav + no horizontal scroll) */
 @media (max-width: 920px) {
+  .nav-inner {
+    padding: 0 16px;
+  }
+
   .hero-grid,
   .grid-3,
   .stories,
@@ -436,30 +410,45 @@ footer {
   }
 
   .nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .nav-actions {
     display: none;
   }
 }
 
 @media (max-width: 640px) {
-  .hero {
-    padding-top: 42px;
+  .nav-inner {
+    min-height: 68px;
+    padding: 0 12px;
   }
 
-  .hero-actions {
-    justify-content: center;
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   .nav-actions {
+    display: flex;
     width: 100%;
+    justify-content: center;
+    gap: 10px;
   }
 
   .nav-actions .btn {
     flex: 1;
+    padding: 9px 12px;
+    font-size: 0.95rem;
   }
 
-  .section-head,
-  .footer-inner {
-    flex-direction: column;
-    align-items: start;
+  .hero {
+    padding: 60px 0 28px;
+  }
+
+  .hero-actions {
+    justify-content: center;
   }
 }
